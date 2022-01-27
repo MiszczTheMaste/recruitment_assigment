@@ -4,6 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    upload_dir: '../var/uploads'
+    upload_route: '/api/upload-file'
+    file_directory: 'var/uploads'
 
 services:
     # default configuration for services in *this* file
@@ -23,3 +26,52 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\File\Controller\UploadAction:
+        public: true
+        arguments:
+            $handler: '@App\File\CommandHandler\UploadHandler'   
+
+    App\File\CommandHandler\UploadHandler:
+        arguments:
+            $uploadDir: '%upload_dir%'   
+        
+    App\SiteRenderer\Controller\FormRendererAction:
+        public: true  
+        
+    App\SiteRenderer\Controller\TableRendererAction:
+        public: true 
+        arguments:
+            $handler: '@App\SiteRenderer\QueryHandler\TableRendererHandler'   
+
+    App\SiteRenderer\QueryHandler\TableRendererHandler:
+        public: true 
+        arguments:
+            $repository: '@App\Product\Repository\DBALProductRepository'   
+        
+    App\Command\InsertCSV:
+        public: true
+        arguments:
+            $addProductController: '@App\Product\Controller\AddProductAction'   
+            $fileDirectory: '%file_directory%'
+        
+    App\Product\Controller\AddProductAction:
+        public: true
+        arguments:
+            $handler: '@App\Product\CommandHandler\AddProductHandler'   
+    
+    App\Product\CommandHandler\AddProductHandler:
+        public: true
+        arguments:
+            $productRepository: '@App\Product\Repository\DBALProductRepository'      
+            $fileRepository: '@App\File\Repository\CSVFileRepository'     
+            $fileDirectory: '%file_directory%'
+            
+    App\Product\Repository\DBALProductRepository:
+        public: true
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'     
+    
+    App\File\Repository\FileRepository:
+
+           

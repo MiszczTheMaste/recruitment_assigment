@@ -1,7 +1,15 @@
-controllers:
-    resource: ../src/Controller/
-    type: annotation
+render_form:
+    path: /api/form
+    controller: App\SiteRenderer\Controller\FormRendererAction
+    methods: [GET]
 
-kernel:
-    resource: ../src/Kernel.php
-    type: annotation
+render_table:
+    path: /api/table
+    controller: App\SiteRenderer\Controller\TableRendererAction
+    methods: [GET]
+    
+upload_file:
+    path: /api/upload-file
+    controller: App\File\Controller\UploadAction
+    methods: [POST]
+

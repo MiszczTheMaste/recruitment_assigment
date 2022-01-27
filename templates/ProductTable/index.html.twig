@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Products table{% endblock %}
+
+{% block stylesheets %}
+<style>
+    table td{
+        border: solid 1px #000;
+    }
+    table{
+        border-collapse: collapse;
+    }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+   <table>
+    {% for row in products %}
+        <tr>
+            <td>{{row.index}}</td>
+            <td>{{row.name}}</td>
+        </tr>
+    {% endfor %}
+      
+    
+   </table>
+{% endblock %}
